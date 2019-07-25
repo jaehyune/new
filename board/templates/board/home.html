@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="kr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+            h1{display: inline;}
+    </style>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  </head>
+    <body>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        
+        <div class="container">
+            <br><br>
+            <table cellspacing=1 width=700 border=1>
+                <tr>
+                    <th scope="col">NO.</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">등록일</th>
+                </tr> 
+                
+                {% for board in posts %}
+                <tr>
+                    
+                    <td>{{board.id}}</td> 
+                    <td><a href="{% url 'detail' board.id %}">{{board.title}}</a></td>
+                    <td></td>
+                    <td>{{board.pub_date}}</td>
+                </tr> 
+                {%endfor%} 
+            
+            </table>
+            <br><br>
+            <form action="{%url 'new' %}"> 
+                    <input class="btn btn-dark" type="submit" value="글쓰기">
+            </form>
+
+            <form name=search method=post action="/searchWithSubject/">
+                <p align=right><input type=text name=searchStr size=50  maxlength=50>
+                <input type="submit" value="글찾기"></p>
+            </form>
+            <form id="logout" method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %} <input type="hidden" />
+            </form>
+
+            {%if posts.has_previous%}
+            <a href="?page=1">First</a>
+            <a href="?page={{posts.previous_page_number}}">Previous</a>
+            {%endif%}
+
+            <span>{{posts.number}}</span>
+            <span>of</span>
+            <span>{{posts.paginator.num_pages}}</span>
+
+            {%if posts.has_next%}
+            <a href="?page={{posts.next_page_number}}">Next</a>
+            <a href="?page={{posts.paginator.num_pages}}">Last</a>
+            {%endif%}
+        </div>
+    </body>       
+        
+</html>
